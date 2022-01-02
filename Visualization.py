@@ -22,5 +22,5 @@ grid = CanvasGrid(draw_pegs, md.width, md.height, 1000, 900)
 
 server = ModularServer(nim_squared, [grid],
 "Peg Model",
-{"height":md.height, "width":md.width,"type_of_game": 1})
+{"height":md.height, "width":md.width,"type_of_game": md.type_of_game})
 server.port = 8521 # The default
