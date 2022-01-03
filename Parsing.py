@@ -36,6 +36,28 @@ clf = clf.fit(X_train, y_train)
 tree.plot_tree(clf)
 """
 
-hej='(2,1)'
-hallo=make_tuple(hej)
-print([hallo])
+df=pd.read_csv("ABM/Mietestreadme")
+temp=df['Winner']
+list_of_smart_winners = []
+for i in temp:
+    list_of_smart_winners.append(i)
+print(
+    'smart game: 1:', list_of_smart_winners.count(1),
+    '2: ', list_of_smart_winners.count(2)
+)
+
+
+f = open("RL/readme.txt", "r")
+fnew=f.readlines()
+f_list=fnew[0].split(',')
+listlist=[]
+for i in f_list:
+    try:
+        integer = int(i)
+        listlist.append(integer)
+    except:
+        continue
+print(
+    'dumb game: 1:', listlist.count(1),
+    '2: ', listlist.count(2)
+)

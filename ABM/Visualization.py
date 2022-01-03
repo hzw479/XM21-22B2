@@ -1,8 +1,7 @@
-from mesa.visualization.modules import CanvasGrid, ChartModule, TextElement
+from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
-import Agent as ac
-import Model as md
-from Model import nim_squared
+from ABM import Model as md
+from ABM.Model import nim_squared
 
 
 

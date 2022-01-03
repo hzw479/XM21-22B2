@@ -2,6 +2,7 @@ import itertools
 import numpy as np
 import pickle
 from ast import literal_eval as make_tuple
+import random
 
 type_of_game = 4  # 1 could be random game board each game
 height = 5
@@ -114,7 +115,6 @@ class State:
                 win = self.winner()
                 if win is not None:
                     # self.showBoard()
-                    # ended with p1 either win or draw
                     self.giveReward()
                     self.p1.reset()
                     self.p2.reset()
@@ -155,8 +155,12 @@ class State:
             if win is not None:
                 if win == 1:
                     print(self.p1.name, "wins!")
+                    with open('readme.txt', 'a') as f:
+                        f.write('1, ')
                 elif win==-1:
                     print(self.p2.name, "wins!")
+                    with open('readme.txt', 'a') as f:
+                        f.write('2, ')
                 self.reset()
                 break
 
@@ -173,8 +177,12 @@ class State:
                 if win is not None:
                     if win == -1:
                         print(self.p2.name, "wins!")
+                        with open('readme.txt', 'a') as f:
+                            f.write('2, ')
                     elif win == 1:
                         print(self.p1.name, "wins!")
+                        with open('readme.txt', 'a') as f:
+                            f.write('1, ')
                     else:
                         print("tie!", win)
                     self.reset()
@@ -282,6 +290,24 @@ class HumanPlayer:
     def reset(self):
         pass
 
+class RandomPlayer:
+    def __init__(self, name):
+        self.name = name
+
+    def chooseAction(self, positions):
+        while True:
+            return random.choice(positions)
+
+    # append a hash state
+    def addState(self, state):
+        pass
+
+    # at the end of game, backpropagate and update states value
+    def feedReward(self, reward):
+        pass
+
+    def reset(self):
+        pass
 
 if __name__ == "__main__":
     # training
@@ -290,14 +316,15 @@ if __name__ == "__main__":
 
     st = State(p1, p2)
     print("training...")
-    st.play(50000)
+    st.play(100000)
     p1.savePolicy()
     p2.savePolicy()
     # play with human
     p1 = Player("computer", exp_rate=0)
     p1.loadPolicy("policy_p1")
 
-    p2 = HumanPlayer("human")
-
+    #p2 = HumanPlayer("human")
+    p2=RandomPlayer("Random")
     st = State(p1, p2)
-    st.play2()
+    for i in range(100000):
+        st.play2()

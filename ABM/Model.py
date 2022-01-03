@@ -1,5 +1,5 @@
-from mesa import Agent, Model
-import Agent as ac
+from mesa import Model
+from ABM import Agent as ac
 from mesa.time import SimultaneousActivation
 from mesa.space import SingleGrid
 import random
@@ -7,7 +7,7 @@ from mesa.datacollection import DataCollector
 from scipy.special import comb
 import itertools
 
-type_of_game= 4 #1 could be random game board each game
+type_of_game= 2 #1 could be random game board each game
 height = 5
 width = 5
 removed_list = []
@@ -24,7 +24,8 @@ def set_up_game(self,h,w,set_up_type):
     elif set_up_type==2: #Mie
         #peg_placings=[(0,2),(1,1),(1,2), (1,4), (2,4), (3,0),(3,2), (4,1), (4,4)] #hw5
         #peg_placings = [(0,1),(0,2), (1,0),(2,2)] #hw3
-        peg_placings = [(i,j) for i in range(4) for j in range(4)]
+        #peg_placings = [(i,j) for i in range(4) for j in range(4)]
+        peg_placings = [(0,0), (0,2), (1,2), (1,4), (2,1), (2,2), (2,3), (3,0), (3,3), (4,0), (4,4)]
         for i in range(len(peg_placings)):
             peggie = ac.peg(i,self)
             self.schedule.add(peggie)
@@ -214,7 +215,6 @@ class nim_squared(Model):
         self.timer=0
     def step(self):
         self.schedule.step()
-        print(self.grid)
         make_move(self)
         get_list_of_possible_moves(self)
         self.player = 1 + ((self.player) % 2)

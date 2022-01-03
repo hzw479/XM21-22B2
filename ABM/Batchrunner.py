@@ -5,7 +5,7 @@ import pandas as pd
 from functools import reduce
 import operator
 
-antal_iterationer = 10000
+antal_iterationer = 100000
 max_numer_of_moves = 1000
 
 
@@ -22,7 +22,7 @@ def batch_run():
                             iterations=antal_iterationer,
                             max_steps=max_numer_of_moves,
                             model_reporters={"Winner": get_winner
-                                , "Pegs removed": lambda m: md.removed_list
+                                #, "Pegs removed": lambda m: md.removed_list
                                              })
 
 
@@ -39,4 +39,4 @@ def batch_run():
 #print("Numer of times player 1 has won the game out of", antal_iterationer, "is", batch_run().count(1))
 #print(batch_run())
 
-batch_run().to_csv(r'csvDiana3', index = False)
+batch_run().to_csv(r'Mietestreadme', index = False)
