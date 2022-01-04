@@ -8,7 +8,9 @@ type_of_game = 4  # 1 could be random game board each game
 height = 5
 width = 5
 removed_list = []
-
+file_name = 'e2a35g95'
+pol1 = 'policy_p1test'
+pol2 = 'policy_p2test'
 
 
 
@@ -89,6 +91,7 @@ class State:
 
     # board reset
     def reset(self):
+        print(self.p1.states_value)
         self.board = np.array([[0,1,0,0,1],
                       [0,0,1,1,0],
                       [1,1,1,0,0],
@@ -144,7 +147,7 @@ class State:
         while not self.isEnd:
             # Player 1
             positions = self.available_moves()
-            p1_action = self.p1.chooseAction(positions, self.board)
+            p1_action = self.p1.chooseSmartAction(positions, self.board)
             print('Player', self.player, 'takes action', p1_action)
             # take action and upate board state
             self.updateState(p1_action)
@@ -155,11 +158,11 @@ class State:
             if win is not None:
                 if win == 1:
                     print(self.p1.name, "wins!")
-                    with open('readme.txt', 'a') as f:
+                    with open('readme2.txt', 'a') as f:
                         f.write('1, ')
                 elif win==-1:
                     print(self.p2.name, "wins!")
-                    with open('readme.txt', 'a') as f:
+                    with open('readme2.txt', 'a') as f:
                         f.write('2, ')
                 self.reset()
                 break
@@ -177,11 +180,57 @@ class State:
                 if win is not None:
                     if win == -1:
                         print(self.p2.name, "wins!")
-                        with open('readme.txt', 'a') as f:
+                        with open('readme2.txt', 'a') as f:
                             f.write('2, ')
                     elif win == 1:
                         print(self.p1.name, "wins!")
-                        with open('readme.txt', 'a') as f:
+                        with open('readme2.txt', 'a') as f:
+                            f.write('1, ')
+                    else:
+                        print("tie!", win)
+                    self.reset()
+                    break
+
+    #play with random without printing
+    def play3(self):
+        while not self.isEnd:
+            # Player 1
+            positions = self.available_moves()
+            p1_action = self.p1.chooseSmartAction(positions, self.board)
+            # take action and upate board state
+            self.updateState(p1_action)
+            #self.showBoard()
+            # check board status if it is end
+            win = self.winner()
+            self.player = self.change_player()
+            if win is not None:
+                if win == 1:
+                    #print(self.p1.name, "wins!")
+                    with open(file_name, 'a') as f:
+                        f.write('1, ')
+                elif win==-1:
+                    #print(self.p2.name, "wins!")
+                    with open(file_name, 'a') as f:
+                        f.write('2, ')
+                self.reset()
+                break
+
+            else:
+                # Player 2
+                positions = self.available_moves()
+                p2_action = self.p2.chooseAction(positions)
+                self.updateState(p2_action)
+                #self.showBoard()
+                win = self.winner()
+                self.player = self.change_player()
+                if win is not None:
+                    if win == -1:
+                        #print(self.p2.name, "wins!")
+                        with open(file_name, 'a') as f:
+                            f.write('2, ')
+                    elif win == 1:
+                        #print(self.p1.name, "wins!")
+                        with open(file_name, 'a') as f:
                             f.write('1, ')
                     else:
                         print("tie!", win)
@@ -206,12 +255,12 @@ class State:
 
 
 class Player:
-    def __init__(self, name, exp_rate=0.3):
+    def __init__(self, name, exp_rate=0.2):
         self.name = name
         self.states = []  # record all positions taken
-        self.lr = 0.2
+        self.lr = 0.35 #should decrease as you continue to gain a larger and larger knowledge base.
         self.exp_rate = exp_rate
-        self.decay_gamma = 0.9
+        self.decay_gamma = 0.95 #big gamma means thinking long term
         self.states_value = {}  # state -> value
 
     def getHash(self, board):
@@ -225,18 +274,34 @@ class Player:
             act = positions[idx]
         else:
             value_max = -999
+            for p in positions: #all possible moves
+                next_board = current_board.copy()
+                for i in p:
+                    next_board[i] = 0 #performs a move to a fake board
+                next_boardHash = self.getHash(next_board)
+                value = 0 if self.states_value.get(next_boardHash) is None else self.states_value.get(next_boardHash)#checks the value for fake move
+                #print("value", value)
+                if value >= value_max:
+                    value_max = value
+                    act = p #chooses actin with highest state_value
+        # print("{} takes action {}".format(self.name, action))
+        return act
+
+
+    def chooseSmartAction(self, positions, current_board):
+            value_max = -999
             for p in positions:
                 next_board = current_board.copy()
                 for i in p:
                     next_board[i] = 0
                 next_boardHash = self.getHash(next_board)
                 value = 0 if self.states_value.get(next_boardHash) is None else self.states_value.get(next_boardHash)
-                # print("value", value)
+                #print("value", value)
                 if value >= value_max:
                     value_max = value
                     act = p
-        # print("{} takes action {}".format(self.name, action))
-        return act
+            # print("{} takes action {}".format(self.name, action))
+            return act
 
     # append a hash state
     def addState(self, state):
@@ -244,16 +309,21 @@ class Player:
 
     def feedReward(self, reward):
         for st in reversed(self.states):
+
             if self.states_value.get(st) is None:
                 self.states_value[st] = 0
+            #old_value=  self.states_value[st]
+            #new_value = (1-self.lr)*old_value+self.lr*(reward+self.decay_gamma*maxV)
             self.states_value[st] += self.lr * (self.decay_gamma * reward - self.states_value[st])
+            #self.states_value[st]=new_value
             reward = self.states_value[st]
+            #print(st, reward)
 
     def reset(self):
         self.states = []
 
     def savePolicy(self):
-        fw = open('policy_' + str(self.name), 'wb')
+        fw = open('policy_' + str(self.name)+file_name, 'wb')
         pickle.dump(self.states_value, fw)
         fw.close()
 
@@ -316,15 +386,17 @@ if __name__ == "__main__":
 
     st = State(p1, p2)
     print("training...")
-    st.play(100000)
-    p1.savePolicy()
-    p2.savePolicy()
+    st.play(1)
+    #p1.savePolicy()
+    #p2.savePolicy()
     # play with human
-    p1 = Player("computer", exp_rate=0)
-    p1.loadPolicy("policy_p1")
-
+    #p1 = Player("computer", exp_rate=0)
+    #p1.loadPolicy(pol1)
+    #print(p1.states_value)
     #p2 = HumanPlayer("human")
-    p2=RandomPlayer("Random")
-    st = State(p1, p2)
-    for i in range(100000):
-        st.play2()
+   # p2 = RandomPlayer('Random')
+   # st = State(p1, p2)
+   # for i in range(100000):
+   #     if i%1000==0:
+   #         print('game number:', i)
+   #     st.play3()

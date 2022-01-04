@@ -1,4 +1,5 @@
 import pandas as pd
+
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 import ast
@@ -7,7 +8,7 @@ import numpy as np
 import itertools
 from ast import literal_eval as make_tuple
 
-
+file_name='e2a35g95'
 """
 df=pd.read_csv("testcsv")
 #print(len(df))
@@ -42,12 +43,12 @@ list_of_smart_winners = []
 for i in temp:
     list_of_smart_winners.append(i)
 print(
-    'smart game: 1:', list_of_smart_winners.count(1),
+    'dumb game: 1:', list_of_smart_winners.count(1),
     '2: ', list_of_smart_winners.count(2)
 )
 
 
-f = open("RL/readme.txt", "r")
+f = open(file_name, "r")
 fnew=f.readlines()
 f_list=fnew[0].split(',')
 listlist=[]
@@ -58,6 +59,6 @@ for i in f_list:
     except:
         continue
 print(
-    'dumb game: 1:', listlist.count(1),
+    'smart game: 1:', listlist.count(1),
     '2: ', listlist.count(2)
 )
