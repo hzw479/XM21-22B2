@@ -8,7 +8,7 @@ import numpy as np
 import itertools
 from ast import literal_eval as make_tuple
 
-file_name='e2a35g95'
+file_name='e1a3g9'
 """
 df=pd.read_csv("testcsv")
 #print(len(df))
@@ -35,9 +35,9 @@ X_train, X_test, y_train, y_test = train_test_split(Xdf, y, test_size=0.33, rand
 clf = tree.DecisionTreeClassifier()
 clf = clf.fit(X_train, y_train)
 tree.plot_tree(clf)
-"""
 
-df=pd.read_csv("ABM/Mietestreadme")
+
+df=pd.read_csv("Mietestreadme")
 temp=df['Winner']
 list_of_smart_winners = []
 for i in temp:
@@ -47,18 +47,34 @@ print(
     '2: ', list_of_smart_winners.count(2)
 )
 
-
+list_of_winners = []
+_list_of_winners = []
 f = open(file_name, "r")
 fnew=f.readlines()
-f_list=fnew[0].split(',')
-listlist=[]
-for i in f_list:
-    try:
-        integer = int(i)
-        listlist.append(integer)
-    except:
-        continue
+for i in fnew:
+    list_of_winners.append(i[-4])
+for i in list_of_winners:
+    _list_of_winners.append(int(i))
 print(
-    'smart game: 1:', listlist.count(1),
-    '2: ', listlist.count(2)
+    'smart game: 1:', _list_of_winners.count(1),
+    '2: ', _list_of_winners.count(2)
 )
+#f_list=fnew[0].split(',')
+#listlist=[]
+#for i in f_list:
+#    try:
+#        integer = int(i)
+#        listlist.append(integer)
+#    except:
+#        continue
+#print(
+#    'smart game: 1:', listlist.count(1),
+#    '2: ', listlist.count(2)
+#)
+"""
+df=pd.read_csv("dict.csv", names=['Weight', 'Board'])
+
+hej=df.loc[df['Weight'] >= 0.7]
+print(hej)
+hej.to_csv(r'mettecsv', index = False)
+

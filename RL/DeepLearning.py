@@ -8,9 +8,9 @@ type_of_game = 4  # 1 could be random game board each game
 height = 5
 width = 5
 removed_list = []
-file_name = 'e2a35g95'
-pol1 = 'policy_p1test'
-pol2 = 'policy_p2test'
+file_name = 'e1a3g9'
+pol1 = 'policy_p1e1a3g9'
+pol2 = 'policy_p2e1a3g9'
 
 
 
@@ -91,7 +91,6 @@ class State:
 
     # board reset
     def reset(self):
-        print(self.p1.states_value)
         self.board = np.array([[0,1,0,0,1],
                       [0,0,1,1,0],
                       [1,1,1,0,0],
@@ -117,7 +116,6 @@ class State:
 
                 win = self.winner()
                 if win is not None:
-                    # self.showBoard()
                     self.giveReward()
                     self.p1.reset()
                     self.p2.reset()
@@ -136,7 +134,7 @@ class State:
                     if win is not None:
                         # self.showBoard()
                         # ended with p2 either win or draw
-                        self.giveReward()
+                        #self.giveReward()
                         self.p1.reset()
                         self.p2.reset()
                         self.reset()
@@ -197,6 +195,8 @@ class State:
             # Player 1
             positions = self.available_moves()
             p1_action = self.p1.chooseSmartAction(positions, self.board)
+            with open(file_name, 'a') as f:
+                f.write(str(p1_action)+', ')
             # take action and upate board state
             self.updateState(p1_action)
             #self.showBoard()
@@ -207,7 +207,7 @@ class State:
                 if win == 1:
                     #print(self.p1.name, "wins!")
                     with open(file_name, 'a') as f:
-                        f.write('1, ')
+                        f.write('1, \n')
                 elif win==-1:
                     #print(self.p2.name, "wins!")
                     with open(file_name, 'a') as f:
@@ -219,6 +219,8 @@ class State:
                 # Player 2
                 positions = self.available_moves()
                 p2_action = self.p2.chooseAction(positions)
+                with open(file_name, 'a') as f:
+                    f.write(str(p2_action)+', ')
                 self.updateState(p2_action)
                 #self.showBoard()
                 win = self.winner()
@@ -227,11 +229,11 @@ class State:
                     if win == -1:
                         #print(self.p2.name, "wins!")
                         with open(file_name, 'a') as f:
-                            f.write('2, ')
+                            f.write('2, \n')
                     elif win == 1:
                         #print(self.p1.name, "wins!")
                         with open(file_name, 'a') as f:
-                            f.write('1, ')
+                            f.write('1, \n')
                     else:
                         print("tie!", win)
                     self.reset()
@@ -255,12 +257,12 @@ class State:
 
 
 class Player:
-    def __init__(self, name, exp_rate=0.2):
+    def __init__(self, name, exp_rate=0.1):
         self.name = name
         self.states = []  # record all positions taken
-        self.lr = 0.35 #should decrease as you continue to gain a larger and larger knowledge base.
+        self.lr = 0.3 #should decrease as you continue to gain a larger and larger knowledge base.
         self.exp_rate = exp_rate
-        self.decay_gamma = 0.95 #big gamma means thinking long term
+        self.decay_gamma = 0.9 #big gamma means thinking long term
         self.states_value = {}  # state -> value
 
     def getHash(self, board):
@@ -308,16 +310,12 @@ class Player:
         self.states.append(state)
 
     def feedReward(self, reward):
-        for st in reversed(self.states):
+        for st in reversed(self.states): #goes through all saved board states of this game
 
-            if self.states_value.get(st) is None:
-                self.states_value[st] = 0
-            #old_value=  self.states_value[st]
-            #new_value = (1-self.lr)*old_value+self.lr*(reward+self.decay_gamma*maxV)
-            self.states_value[st] += self.lr * (self.decay_gamma * reward - self.states_value[st])
-            #self.states_value[st]=new_value
+            if self.states_value.get(st) is None: #if it's not already in the dictionary (of board states of ALL games)
+                self.states_value[st] = 0 #initialise a value for the state
+            self.states_value[st] += self.lr * (self.decay_gamma * reward - self.states_value[st]) #update weight for each board state
             reward = self.states_value[st]
-            #print(st, reward)
 
     def reset(self):
         self.states = []
@@ -386,17 +384,17 @@ if __name__ == "__main__":
 
     st = State(p1, p2)
     print("training...")
-    st.play(1)
-    #p1.savePolicy()
-    #p2.savePolicy()
+    st.play(500000)
+    p1.savePolicy()
+    p2.savePolicy()
     # play with human
-    #p1 = Player("computer", exp_rate=0)
-    #p1.loadPolicy(pol1)
-    #print(p1.states_value)
+    p1 = Player("computer", exp_rate=0)
+    p1.loadPolicy(pol1)
     #p2 = HumanPlayer("human")
-   # p2 = RandomPlayer('Random')
-   # st = State(p1, p2)
-   # for i in range(100000):
-   #     if i%1000==0:
-   #         print('game number:', i)
-   #     st.play3()
+    p2 = RandomPlayer('Random')
+    st = State(p1, p2)
+    #st.play2()
+    for i in range(100000):
+        if i%1000==0:
+            print('game number:', i)
+        st.play3()

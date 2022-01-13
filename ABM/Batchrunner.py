@@ -39,4 +39,4 @@ def batch_run():
 #print("Numer of times player 1 has won the game out of", antal_iterationer, "is", batch_run().count(1))
 #print(batch_run())
 
-batch_run().to_csv(r'Mietestreadme', index = False)
+batch_run().to_csv(r'randomcsv', index = False)
