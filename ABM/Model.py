@@ -25,8 +25,8 @@ def set_up_game(self,h,w,set_up_type):
         #peg_placings=[(0,2),(1,1),(1,2), (1,4), (2,4), (3,0),(3,2), (4,1), (4,4)] #hw5
         #peg_placings = [(0,1),(0,2), (1,0),(2,2)] #hw3
         #peg_placings = [(i,j) for i in range(4) for j in range(4)]
-        peg_placings = [(0,0), (0,2), (1,2), (1,4), (2,1), (2,2), (2,3), (4,0), (4,4),(3,3),(3,0)]
-        #removed_pegs=[(3,3),(3,0)]
+        peg_placings = [(0,2), (1,2), (1,4), (2,1), (2,2), (2,3),(4,4),(3,3),]
+        #removed_pegs=[(3,3),(3,0),(0,0), ]
         for i in range(len(peg_placings)):
             peggie = ac.peg(i,self)
             self.schedule.add(peggie)
