@@ -6,6 +6,7 @@ from ABM.Model import nim_squared
 
 
 def draw_pegs(agent):
+    """function to display pegs"""
     if agent.removed == False:
         portrayal = {"Shape": "rect",
                      "Color": "black",
