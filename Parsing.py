@@ -12,7 +12,7 @@ list_of_winners = []
 for i in temp:
     list_of_winners.append(i)
 print(
-    'SMART GAME: \n Player 1 succes rate:', list_of_winners.count(1)*100/len(list_of_winners),'%',
+    'RANDOM GAME: \n Player 1 succes rate:', list_of_winners.count(1)*100/len(list_of_winners),'%',
     '\n Player 2 succes rate: ', list_of_winners.count(2)*100/len(list_of_winners),'%'
 )
 

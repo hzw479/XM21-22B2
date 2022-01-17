@@ -12,11 +12,12 @@ pol1 = 'policy_p1e1a3g9'
 pol2 = 'policy_p2e1a3g9'
 
 
-
+height = 5
+width = 5
 class Nim_squared:
     def __init__(self, p1,p2):
-        self.height = 5
-        self.width = 5
+        self.height = height
+        self.width = width
         self.board = np.array([[0,1,0,0,1], #How the board should look.
                       [0,0,1,1,0],
                       [1,1,1,0,0],
@@ -296,7 +297,7 @@ class Player:
         function for getting board state
         :return: returns a list-like-object representing the current board state
         """
-        boardHash = str(board.reshape(self.height * self.width))
+        boardHash = str(board.reshape(height * width))
         return boardHash
 
     def chooseAction(self, positions, current_board):

@@ -22,7 +22,7 @@ def set_up_game(self,h,w,set_up_type):
             position= self.grid.find_empty()
             self.grid.place_agent(peggie,position)
     elif set_up_type==2: #custom board
-        peg_placings = [(0,2), (1,2), (1,4), (2,1), (2,2), (2,3),(4,4),(3,3),]
+        peg_placings = [(0,0),  (2,1),(1,4), (0,2),(1,2),(2,2),  (2,3),  (4,4),(4,0)]
         for i in range(len(peg_placings)):
             peggie = ac.peg(i,self)
             self.schedule.add(peggie)
