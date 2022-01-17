@@ -4,22 +4,22 @@ This repository consists on 2 directories of interest.
 
 ABM:
 ABM stands for Agent Based Model, and this directory contains files regarding this model.
-    Agent.py contains the class which holds the pegs. As pegs cannot do anything, this file contains nothing of real interest
-    and is purely there for the program to work. Note you do not have to run this file.
+    Agent.py contains the class which holds the pegs. As pegs cannot do anything, this file contains nothing of real interest and is purely there for the program to work. Note you do not have to run this file.
 
-    Model.py contains the game itself. This is the nim_squared class. The class is initialized with model specific parameters
-    as well as a step function. The step function is what actually plays the game. The step function works simply by first
-    calling a make_move function and then changing the player afterwards. This file contains a few more functions which are
-    there for the program to work, but these are well commented within the file. The function _make_move is not in use as it was
-    made in the progress of finding the most efficient way of choosing moves.
-    In the top of the file, 4 parameters are defined. If the user wish to play a game with a random game board, change the value
-    of type_of_game to 1 and the values of height and width to the dimensions desired. Is the user wish to play a costumized board
-    let type_of_game equal 2 and alter peg_placings at line 25 to a list consisting of the desired peg placements. Note you still
-    have to state the right dimensions regarding height and width.
+    Model.py contains the game itself. This is the nim_squared class. The class is initialized with model specific
+    parameters as well as a step function. The step function is what actually plays the game. The step function works
+    simply by first calling a make_move function and then changing the player afterwards. This file contains a few
+    more functions which are there for the program to work, but these are well commented within the file. The function
+    _make_move is not in use as it was made in the progress of finding the most efficient way of choosing moves.
+    In the top of the file, 4 parameters are defined. If the user wish to play a game with a random game board,
+    change the value of type_of_game to 1 and the values of height and width to the dimensions desired. Is the user
+    wish to play a costumized board let type_of_game equal 2 and alter peg_placings at line 25 to a list consisting
+    of the desired peg placements. Note you still have to state the right dimensions regarding height and width.
     Note the you do not have to run this file.
 
-    Visualization.py contains all that is used for visualizing the game. It contains a function which defines color an size for the
-    pegs. It also chooses the (physical) size of the grid. Do not alter this file. Note you do not have to run this file.
+    Visualization.py contains all that is used for visualizing the game. It contains a function which defines
+    color an size for the pegs. It also chooses the (physical) size of the grid. Do not alter this file.
+    Note you do not have to run this file.
 
     run.py is the file which launches the server and thus starts the game. Do not alter this file. THIS IS THE ONLY
     FILE TO RUN WHEN WANTING TO PLAY.
