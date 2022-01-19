@@ -1,4 +1,3 @@
-SKIFT NAVN PÅ MAPPER
 
 This repository consists on 2 directories of interest.
 
